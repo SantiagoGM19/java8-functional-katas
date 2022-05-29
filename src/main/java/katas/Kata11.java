@@ -1,11 +1,14 @@
 package katas;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import util.DataUtil;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /*
     Goal: Create a datastructure from the given data:
@@ -63,8 +66,25 @@ public class Kata11 {
         List<Map> boxArts = DataUtil.getBoxArts();
         List<Map> bookmarkList = DataUtil.getBookmarkList();
 
-        return ImmutableList.of(ImmutableMap.of("name", "someName", "videos", ImmutableList.of(
+        return StreamUtils.zip(lists.stream(), videos.stream(),
+                (listsStream, videosStream) ->
+                        ImmutableMap.of(
+                                "name", listsStream.get("name"),
+                                "videos", StreamUtils.zip(boxArts.stream(), bookmarkList.stream(),
+                                        (boxArtsStream, bookmarkListStream) ->
+                                                ImmutableMap.of(
+                                                        "id", videosStream.get("id"),
+                                                        "title", videosStream.get("title"),
+                                                        "time", bookmarkListStream.get("time"),
+                                                        "boxart", boxArtsStream.get("url")
+                                                )
+                                        )
+                                )
+                ).collect(Collectors.toList());
+
+
+        /*return ImmutableList.of(ImmutableMap.of("name", "someName", "videos", ImmutableList.of(
                 ImmutableMap.of("id", 5, "title", "The Chamber", "time", 123, "boxart", "someUrl")
-        )));
+        )));*/
     }
 }
