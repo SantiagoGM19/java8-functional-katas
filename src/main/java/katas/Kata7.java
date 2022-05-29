@@ -3,6 +3,7 @@ package katas;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import model.Bookmark;
+import model.BoxArt;
 import model.Movie;
 import model.MovieList;
 import util.DataUtil;
@@ -27,24 +28,20 @@ public class Kata7 {
                                 )
                             ).collect(Collectors.toList());
 
-        /*System.out.println(movieLists.stream().map(movieList -> movieList.getVideos().stream().collect(Collectors.toList())).collect(Collectors.toList()));*/
-
         return movieLists.stream()
-                .map(movieList -> Map.of(movieList.getName() , movieList.getVideos().stream()
-                                .map(movie -> List.of(
+                .flatMap(movieList -> movieList.getVideos().stream()
+                                .map(movie -> ImmutableMap.of(
+                                        "id",
                                         movie.getId(),
+                                        "title",
                                         movie.getTitle(),
-                                        movie.getBoxarts().stream()
-                                                .filter(boxArt -> smallestBoxArt.stream()
-                                                        .filter(integer -> integer == boxArt.getWidth() * boxArt.getHeight())
-                                                        .map(element -> true).collect(Collectors.toList()).get(0)
-                                                )
-                                                .map(boxArt -> boxArt.getUrl()).collect(Collectors.toList()).get(0)
+                                        "boxart",
+                                                movie.getBoxarts().stream()
+                                                        .filter(boxArt -> smallestBoxArt.contains(boxArt.getWidth() * boxArt.getHeight()))
+                                                        .collect(Collectors.toList()).get(0)
                                 )
                                 )
-                        )
-                ).collect(Collectors.toList());
-
-        /*return ImmutableList.of(ImmutableMap.of("id", 5, "title", "Bad Boys", "boxart", "url"));*/
+                )
+                .collect(Collectors.toList());
     }
 }
