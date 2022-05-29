@@ -31,6 +31,5 @@ public class Kata4 {
                                 .map(boxArt -> ImmutableList.of(boxArt.getWidth(), boxArt.getHeight(), boxArt.getUrl()))
                                 .collect(Collectors.toCollection(ArrayList::new))))))
                         .collect(Collectors.toCollection(ArrayList::new));
-        /*return ImmutableList.of(ImmutableMap.of("id", 5, "title", "Bad Boys", "boxart", new BoxArt(150, 200, "url")));*/
     }
 }
