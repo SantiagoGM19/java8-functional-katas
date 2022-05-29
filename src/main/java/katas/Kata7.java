@@ -38,7 +38,7 @@ public class Kata7 {
                                         "boxart",
                                                 movie.getBoxarts().stream()
                                                         .filter(boxArt -> smallestBoxArt.contains(boxArt.getWidth() * boxArt.getHeight()))
-                                                        .collect(Collectors.toList()).get(0)
+                                                        .collect(Collectors.toList()).get(0).getUrl()
                                 )
                                 )
                 )
