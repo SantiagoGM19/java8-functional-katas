@@ -1,5 +1,6 @@
 package katas;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import model.MovieList;
@@ -8,6 +9,7 @@ import util.DataUtil;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /*
     Goal: Create a datastructure from the given data:
@@ -55,9 +57,21 @@ public class Kata10 {
         List<Map> lists = DataUtil.getLists();
         List<Map> videos = DataUtil.getVideos();
 
-        return ImmutableList.of(ImmutableMap.of("name", "someName", "videos", ImmutableList.of(
+        return StreamUtils.zip(lists.stream(), videos.stream(),
+                (listsStream, videosStream) -> ImmutableMap.of(
+                        "name", listsStream.get("name"),
+                        "videos", ImmutableList.of(
+                                ImmutableMap.of(
+                                        "id", videosStream.get("id"),
+                                        "title", videosStream.get("title")
+                                )
+                        )
+                        )
+        ).collect(Collectors.toList());
+
+/*        return ImmutableList.of(ImmutableMap.of("name", "someName", "videos", ImmutableList.of(
                 ImmutableMap.of("id", 5, "title", "The Chamber"),
                 ImmutableMap.of("id", 3, "title", "Fracture")
-        )));
+        )));*/
     }
 }
